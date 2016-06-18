@@ -1,3 +1,6 @@
+[submodule "template"]
+	path = template
+	url = https://github.com/ucb-art/RocketToX.git
 [submodule "uncore"]
 	path = uncore
 	url = https://github.com/ucb-bar/uncore.git
