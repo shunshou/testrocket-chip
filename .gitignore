@@ -1,3 +1,4 @@
+install/
 target/
 project/target
 *.swp
