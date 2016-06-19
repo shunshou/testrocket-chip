@@ -8,6 +8,7 @@ import junctions._
 import uncore._
 import rocket._
 import rocket.Util._
+import RocketToX.RocketToX
 
 /** Top-level parameters of RocketChip, values set in e.g. PublicConfigs.scala */
 
@@ -234,6 +235,11 @@ class Uncore(implicit val p: Parameters) extends Module
     val prci = Module(new PRCI)
     prci.io.tl <> mmioNetwork.port("int:prci")
     io.prci := prci.io.tiles
+
+    val shim = Module(new RocketToX(64,11))
+    val XSmitoTileLink = Module(new SmiIOTileLinkIOConverter(64,11))
+    XSmitoTileLink.io.tl <>mmioNetwork.port("int:x")
+    shim.io.smi <> XSmitoTileLink.io.smi
 
     for (i <- 0 until nTiles) {
       prci.io.interrupts(i).mtip := rtc.io.irqs(i)

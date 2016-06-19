@@ -15,12 +15,18 @@ object BuildSettings extends Build {
     libraryDependencies ++= Seq("org.scala-lang" % "scala-reflect" % scalaVersion.value)
   )
 
+  lazy val template = Project(
+    id = "rocket-to-x",
+    base = file("template"),
+    settings = settings
+  )
+
   lazy val chisel = project in file("chisel" + sys.env.getOrElse("CHISEL_VERSION", 2))
   lazy val cde        = project in file("context-dependent-environments")
   lazy val hardfloat  = project.dependsOn(chisel)
   lazy val junctions  = project.dependsOn(chisel, cde)
   lazy val uncore     = project.dependsOn(junctions)
-  lazy val rocket     = project.dependsOn(hardfloat, uncore)
+  lazy val rocket     = project.dependsOn(template,hardfloat, uncore)
   lazy val groundtest = project.dependsOn(rocket)
   lazy val rocketchip = (project in file(".")).settings(chipSettings).dependsOn(groundtest)
 
